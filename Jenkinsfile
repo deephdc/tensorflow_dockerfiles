@@ -9,11 +9,6 @@ pipeline {
 
     environment {
         dockerhub_repo = "deephdc/tensorflow"
-        build_args = [
-        ["1.10.0", "9.0", "7.0"], // tf_version, cuda_version, cudnn_version
-        ["1.12.0", "9.0", "7.0"],
-        ["1.14.0", "10.0", "7.4"]
-        ]
     }
 
     stages {
@@ -29,6 +24,12 @@ pipeline {
                 script {
                     // build different tags
                     id = "${env.dockerhub_repo}"
+
+                    def build_args = [
+                            ["1.10.0", "9.0", "7.0"], // tf_version, cuda_version, cudnn_version
+                            ["1.12.0", "9.0", "7.0"],
+                            ["1.14.0", "10.0", "7.4"]
+                            ]
 
                     for (current_args in build_args) {
 
