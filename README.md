@@ -1,9 +1,18 @@
-# TensorFlow Dockerfiles
+<div align="center">
+<img src="https://marketplace.deep-hybrid-datacloud.eu/images/logo-deep.png" alt="logo" width="300"/>
+</div>
+
+# Custom TensorFlow Dockerfiles
+
+[![Build Status](https://jenkins.indigo-datacloud.eu/buildStatus/icon?job=Pipeline-as-code/DEEP-OC-org/tensorflow_dockerfiles/master)](https://jenkins.indigo-datacloud.eu/job/Pipeline-as-code/job/DEEP-OC-org/job/tensorflow_dockerfiles/job/master)
 
 This directory houses Dockerfiles to build customized TensorFlow's Docker images to be deployed at 
 [deephdc Docker Hub](https://hub.docker.com/r/deephdc/tensorflow).
 
-Based on the original Tensorflow Dockerfiles: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/tools/dockerfiles
+The files are based on the original [Tensorflow Dockerfiles](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/tools/dockerfiles).
+The compatibility of CUDA/CUDNN versions for the GPU images can be found [here](https://www.tensorflow.org/install/source#tested_build_configurations).
+
+We currently build [cpu/gpu] images for Ubuntu 18.04, Python 3.6 and Tensorflow versions 1.[10.0/12.0/14.0].
 
 ## Building
 

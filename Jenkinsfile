@@ -9,7 +9,11 @@ pipeline {
 
     environment {
         dockerhub_repo = "deephdc/tensorflow"
-        tf_ver = "1.12.0"
+        build_args = [
+        ["1.10.0", "9.0", "7.0"], // tf_version, cuda_version, cudnn_version
+        ["1.12.0", "9.0", "7.0"],
+        ["1.14.0", "10.0", "7.4"]
+        ]
     }
 
     stages {
@@ -26,22 +30,28 @@ pipeline {
                     // build different tags
                     id = "${env.dockerhub_repo}"
 
-                    // CPU + ubuntu18.04 (no CUDA)
-                    sh "docker build --no-cache --force-rm -t ${id}:${tf_ver}-py36 \
-                        -f ./dockerfiles/cpu.Dockerfile \
-                        --build-arg UBUNTU_VERSION=18.04 \
-                        --build-arg TF_PACKAGE=tensorflow \
-                        --build-arg TF_PACKAGE_VERSION=${tf_ver} \
-                        --build-arg USE_PYTHON_3_NOT_2=yes ."
+                    for (current_args in build_args) {
 
-                    // GPU + ubuntu18.04 (CUDA 9.0)
-                    sh "docker build --no-cache --force-rm -t ${id}:${tf_ver}-gpu-py36 \
-                        -f ./dockerfiles/gpu.Dockerfile \
-                        --build-arg UBUNTU_VERSION=18.04 \
-                        --build-arg CUDA=9.0 \
-                        --build-arg TF_PACKAGE=tensorflow-gpu \
-                        --build-arg TF_PACKAGE_VERSION=${tf_ver} \
-                        --build-arg USE_PYTHON_3_NOT_2=yes ."
+                        def (tf_ver, cuda_ver, cudnn_ver) = current_args
+
+                        // CPU + ubuntu18.04 (no CUDA)
+                        sh "docker build --no-cache --force-rm -t ${id}:${tf_ver}-py36 \
+                            -f ./dockerfiles/cpu.Dockerfile \
+                            --build-arg UBUNTU_VERSION=18.04 \
+                            --build-arg TF_PACKAGE=tensorflow \
+                            --build-arg TF_PACKAGE_VERSION=${tf_ver} \
+                            --build-arg USE_PYTHON_3_NOT_2=yes ."
+
+                        // GPU + ubuntu18.04 (CUDA + CuDNN)
+                        sh "docker build --no-cache --force-rm -t ${id}:${tf_ver}-gpu-py36 \
+                            -f ./dockerfiles/gpu.Dockerfile \
+                            --build-arg UBUNTU_VERSION=18.04 \
+                            --build-arg CUDA=${cuda_ver} \
+                            --build-arg CUDNN=${cudnn_ver} \
+                            --build-arg TF_PACKAGE=tensorflow-gpu \
+                            --build-arg TF_PACKAGE_VERSION=${tf_ver} \
+                            --build-arg USE_PYTHON_3_NOT_2=yes ."
+                    }
                 }
             }
             post {
