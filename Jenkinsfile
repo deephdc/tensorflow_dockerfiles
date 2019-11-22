@@ -26,9 +26,8 @@ pipeline {
                     id = "${env.dockerhub_repo}"
 
                     def build_args = [
-                            ["1.10.0", "9.2", "7.4.1.5-1"], // tf_version, cuda_version, cudnn_version
-                            ["1.12.0", "9.2", "7.4.1.5-1"],
-
+                            ["1.10.0", "9.0", "7.4.1.5-1"], // tf_version, cuda_version, cudnn_version
+                            ["1.12.0", "9.0", "7.4.1.5-1"]
                             ]
 
                     for (current_args in build_args) {
