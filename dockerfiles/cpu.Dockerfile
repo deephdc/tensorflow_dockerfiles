@@ -19,13 +19,15 @@
 # throughout. Please refer to the TensorFlow dockerfiles documentation
 # for more information.
 
+### WARNING! ###
+# It tuned for Ubuntu 18.04 with python 3.6!
+###
+
 ARG UBUNTU_VERSION=18.04
 
 FROM ubuntu:${UBUNTU_VERSION} as base
 
-RUN apt-get update && apt-get install -y curl
-
-ARG USE_PYTHON_3_NOT_2
+ARG USE_PYTHON_3_NOT_2=True
 ARG _PY_SUFFIX=${USE_PYTHON_3_NOT_2:+3}
 ARG PYTHON=python${_PY_SUFFIX}
 ARG PIP=pip${_PY_SUFFIX}
@@ -35,7 +37,9 @@ ENV LANG C.UTF-8
 
 RUN apt-get update && apt-get install -y \
     ${PYTHON} \
-    ${PYTHON}-pip
+    ${PYTHON}-pip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN ${PIP} --no-cache-dir install --upgrade \
     pip \
@@ -53,7 +57,7 @@ RUN ln -s $(which ${PYTHON}) /usr/local/bin/python
 # Installs the latest version by default.
 ARG TF_PACKAGE=tensorflow
 ARG TF_PACKAGE_VERSION=
-RUN ${PIP} install ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}}
+RUN ${PIP} install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}}
 
 COPY bashrc /etc/bash.bashrc
 RUN chmod a+rwx /etc/bash.bashrc

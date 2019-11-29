@@ -40,7 +40,7 @@ pipeline {
                             --build-arg UBUNTU_VERSION=18.04 \
                             --build-arg TF_PACKAGE=tensorflow \
                             --build-arg TF_PACKAGE_VERSION=${tf_ver} \
-                            --build-arg USE_PYTHON_3_NOT_2=yes ."
+                            --build-arg USE_PYTHON_3_NOT_2=True ."
 
                         // GPU + ubuntu18.04 (CUDA + CuDNN)
                         sh "docker build --no-cache --force-rm -t ${id}:${tf_ver}-gpu-py36 \
@@ -50,7 +50,7 @@ pipeline {
                             --build-arg CUDNN=${cudnn_ver} \
                             --build-arg TF_PACKAGE=tensorflow-gpu \
                             --build-arg TF_PACKAGE_VERSION=${tf_ver} \
-                            --build-arg USE_PYTHON_3_NOT_2=yes ."
+                            --build-arg USE_PYTHON_3_NOT_2=True ."
                     }
                 }
             }

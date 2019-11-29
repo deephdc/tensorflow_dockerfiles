@@ -1,7 +1,3 @@
-<div align="center">
-<img src="https://marketplace.deep-hybrid-datacloud.eu/images/logo-deep.png" alt="logo" width="300"/>
-</div>
-
 # Custom TensorFlow Dockerfiles
 
 [![Build Status](https://jenkins.indigo-datacloud.eu/buildStatus/icon?job=Pipeline-as-code/DEEP-OC-org/tensorflow_dockerfiles/master)](https://jenkins.indigo-datacloud.eu/job/Pipeline-as-code/job/DEEP-OC-org/job/tensorflow_dockerfiles/job/master)
@@ -12,7 +8,7 @@ This directory houses Dockerfiles to build customized TensorFlow's Docker images
 The files are based on the original [Tensorflow Dockerfiles](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/tools/dockerfiles).
 The compatibility of CUDA/CUDNN versions for the GPU images can be found [here](https://www.tensorflow.org/install/source#tested_build_configurations).
 
-We currently build [cpu/gpu] images for Ubuntu 18.04, Python 3.6 and Tensorflow versions 1.[10.0/12.0/14.0].
+We build cpu/gpu images for Ubuntu 18.04, Python 3.6 and Tensorflow versions 1.10.0/1.12.0, as original Tensorflow images use Ubuntu 16.04 and python 3.5. 
 
 ## Building
 
@@ -20,9 +16,10 @@ The Dockerfiles in the `dockerfiles` directory must have their build context set
 to **the directory with this README.md** to copy in helper files. For example:
 
 ```bash
-$ docker build -f ./dockerfiles/cpu.Dockerfile -t tf .
+$ docker build -f ./dockerfiles/cpu.Dockerfile -t tensorflow .
 ```
 
+This builds a tensorflow CPU-based image with the latest TensorFlow version, Ubuntu 18.04, and python3.
 Each Dockerfile has its own set of available `--build-arg`s which are documented
 in the Dockerfile itself.
 
@@ -30,8 +27,8 @@ in the Dockerfile itself.
 
 ## Running Locally Built Images
 
-After building the image with the tag `tf` (for example), use `docker run` to
-run the images.
+After building the image with the tag `tensorflow` (for example), 
+use `docker run` to run the images.
 
 Note for new Docker users: the `-v` and `-u` flags share directories and
 permissions between the Docker container and your machine. Without `-v`, your
@@ -46,17 +43,14 @@ more info.
 # User permissions (-u) are required if you use (-v).
 
 # CPU-based images
-$ docker run -u $(id -u):$(id -g) -v $(pwd):/my-devel -it tf
+$ docker run -u $(id -u):$(id -g) -v $(pwd):/my-devel -it tensorflow
 
-# GPU-based images (set up nvidia-docker2 first)
-$ docker run --runtime=nvidia -u $(id -u):$(id -g) -v $(pwd):/my-devel -it tf
+# GPU-based images (set up [nvidia-docker2](https://github.com/NVIDIA/nvidia-docker) first)
+$ docker run --runtime=nvidia -u $(id -u):$(id -g) -v $(pwd):/my-devel -it tensorflow
 
-# Images with Jupyter run on port 8888 and need a volume for your notebooks
-# You can change $(PWD) to the full path to a directory if your notebooks
-# live outside the current directory.
-$ docker run --user $(id -u):$(id -g) -p 8888:8888 -v $(PWD):/tf/notebooks -it tf
 ```
 
-These images do not come with the TensorFlow source code -- but the development
-images have git included, so you can `git clone` it yourself.
+**N.B.** For either CPU-based or GPU-based images you can also use [udocker](https://github.com/indigo-dc/udocker).
+
+**P.S.** These images do not come with the TensorFlow source code.
 

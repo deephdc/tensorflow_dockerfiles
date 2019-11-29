@@ -13,7 +13,7 @@
 #
 
 ### WARNING! ###
-# It will optimized for Ubuntu 18.04 + CUDA 9.0 combination!
+# It is optimized for Ubuntu 18.04, python 3.6, and CUDA 9.0 combination!
 ###
 
 ARG UBUNTU_VERSION=18.04
@@ -77,8 +77,8 @@ ENV NVIDIA_REQUIRE_CUDA "cuda>=9.0"
 
 ### <<<= NVIDIA CUDA
 
-
-ARG USE_PYTHON_3_NOT_2
+# Nov-2019: python3 is default
+ARG USE_PYTHON_3_NOT_2=True
 ARG _PY_SUFFIX=${USE_PYTHON_3_NOT_2:+3}
 ARG PYTHON=python${_PY_SUFFIX}
 ARG PIP=pip${_PY_SUFFIX}
